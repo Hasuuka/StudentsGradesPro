@@ -16,6 +16,17 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+public slots:
+    void enableCancleButton();
+    void disableCancleButton();
+
+    void enableCalculateButton();
+    void disableCalculateButton();
+
+
+private slots:
+    void on_downloadButton_clicked();
+
 private:
     Ui::MainWindow *ui;
     CsvListModel* m_csvListModel;

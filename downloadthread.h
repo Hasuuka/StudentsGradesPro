@@ -9,6 +9,7 @@ public:
     explicit DownloadThread(QObject *parent = nullptr);
 
     void run();
+
 };
 
 #endif // DOWNLOADTHREAD_H
