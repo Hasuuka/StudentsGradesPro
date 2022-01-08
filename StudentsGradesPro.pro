@@ -1,4 +1,4 @@
-QT       += core gui
+QT       += core gui network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -14,17 +14,20 @@ SOURCES += \
     downloadthread.cpp \
     main.cpp \
     mainwindow.cpp \
-    shareddata.cpp
+    shareddata.cpp \
+    urldialog.cpp
 
 HEADERS += \
     csv.h \
     csvlistmodel.h \
     downloadthread.h \
     mainwindow.h \
-    shareddata.h
+    shareddata.h \
+    urldialog.h
 
 FORMS += \
-    mainwindow.ui
+    mainwindow.ui \
+    urldialog.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 #include "csvlistmodel.h"
+#include "downloadthread.h"
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -15,20 +17,32 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+signals:
+    void informUrl(QString);
+    void informButton();
 
 public slots:
-    void enableCancleButton();
-    void disableCancleButton();
 
-    void enableCalculateButton();
-    void disableCalculateButton();
+    void on_downloadButton_clicked();
+
+    void on_calculateButton_clicked();
+
+    void changeUrl(QString);
+
+    void changeButton();
+
 
 
 private slots:
-    void on_downloadButton_clicked();
+    void on_cancelButton_clicked();
+    void doSomething();
 
 private:
     Ui::MainWindow *ui;
     CsvListModel* m_csvListModel;
+    QString m_url;
+
+    DownloadThread *m_thread;
+
 };
 #endif // MAINWINDOW_H

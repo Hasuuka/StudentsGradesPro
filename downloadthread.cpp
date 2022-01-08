@@ -1,6 +1,7 @@
 #include "downloadthread.h"
 #include <QDebug>
 #include "shareddata.h"
+#include <QNetworkAccessManager>
 
 DownloadThread::DownloadThread(QObject *parent) : QThread(parent)
 {
@@ -10,7 +11,14 @@ DownloadThread::DownloadThread(QObject *parent) : QThread(parent)
 void DownloadThread::run()
 {
     qDebug() << "Running thread" << QThread::currentThreadId();
-    //SharedData::instance()->addCsv("Dicke Eier", "69PB", "70", "Donald Duck");
+    emit hello();
 
-    QThread::msleep(1000);
+
 }
+
+void DownloadThread::replyFinished(QNetworkReply *reply)
+{
+    qDebug() << reply->readAll();
+}
+
+
