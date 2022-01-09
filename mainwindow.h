@@ -3,7 +3,7 @@
 
 #include <QMainWindow>
 #include "csvlistmodel.h"
-#include "downloadthread.h"
+#include "download.h"
 
 
 QT_BEGIN_NAMESPACE
@@ -31,18 +31,22 @@ public slots:
 
     void changeButton();
 
+    void downloadFinished();
+    void progressUpdated();
+
+    void updateCsvList();
+
 
 
 private slots:
     void on_cancelButton_clicked();
-    void doSomething();
 
 private:
     Ui::MainWindow *ui;
     CsvListModel* m_csvListModel;
     QString m_url;
-
-    DownloadThread *m_thread;
+    QThread* m_thread;
+    Download* m_download;
 
 };
 #endif // MAINWINDOW_H

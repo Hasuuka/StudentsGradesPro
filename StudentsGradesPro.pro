@@ -11,7 +11,7 @@ CONFIG += c++11
 SOURCES += \
     csv.cpp \
     csvlistmodel.cpp \
-    downloadthread.cpp \
+    download.cpp \
     main.cpp \
     mainwindow.cpp \
     shareddata.cpp \
@@ -20,7 +20,7 @@ SOURCES += \
 HEADERS += \
     csv.h \
     csvlistmodel.h \
-    downloadthread.h \
+    download.h \
     mainwindow.h \
     shareddata.h \
     urldialog.h

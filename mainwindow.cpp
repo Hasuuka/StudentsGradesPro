@@ -19,18 +19,19 @@ MainWindow::MainWindow(QWidget *parent)
     connect(this, &MainWindow::informUrl, this, &MainWindow::changeUrl);
     connect(this, &MainWindow::informButton, this, &MainWindow::changeButton);
 
-    m_thread = new DownloadThread();
-    connect(m_thread,SIGNAL(hello()), this, SLOT(doSomething()));
+    m_thread = new QThread();
+    m_download = new Download();
 
-
-
-
+    connect(m_download, &Download::downloadFinished, this, &MainWindow::downloadFinished);
+    connect(m_download, &Download::progressUpdated, this, &MainWindow::progressUpdated);
+    m_download->moveToThread(m_thread);
 
 }
 
 
 MainWindow::~MainWindow()
 {
+
     delete ui;
 }
 
@@ -47,22 +48,9 @@ void MainWindow::on_downloadButton_clicked()
 
 void MainWindow::on_calculateButton_clicked()
 {
-    //emit informButton();
-
-
+    emit informButton();
     m_thread->start();
-
-    qDebug() << "Thread: " << m_thread->currentThread() << " started.";
-    m_thread->wait(); // Wait for end of thread
-
-    qDebug() << "thread: " << m_thread->currentThread() << " is finished";
-
-    m_thread->quit();
-
-    m_csvListModel = new CsvListModel(SharedData::instance()->csvs(), this);
-    ui->csvList->setModel(m_csvListModel);
-
-    delete m_thread;
+    QMetaObject::invokeMethod(m_download,"startCalculation");
 }
 
 void MainWindow::changeUrl(QString url)
@@ -71,7 +59,7 @@ void MainWindow::changeUrl(QString url)
     if(!m_url.isEmpty()){
         ui->calculateButton->setDisabled(false);
     }
-    qDebug()<< m_url;
+    qDebug() << m_url;
 }
 
 void MainWindow::changeButton()
@@ -79,25 +67,34 @@ void MainWindow::changeButton()
     ui->cancelButton->setDisabled(false);
 }
 
+void MainWindow::downloadFinished()
+{
+
+}
+
+void MainWindow::progressUpdated()
+{
+
+}
+
+void MainWindow::updateCsvList()
+{
+    m_csvListModel = new CsvListModel(SharedData::instance()->csvs(), this);
+    ui->csvList->setModel(m_csvListModel);
+}
+
 
 void MainWindow::on_cancelButton_clicked()
 {
-    qDebug()<< "quitted";
     if(m_thread->isRunning()){
         m_thread->requestInterruption();
+        m_thread->quit();
+        m_thread->wait();
+        delete m_thread;
+        delete m_download;
+        qDebug()<< "quitted";
     }
 
 }
 
-void MainWindow::doSomething()
-{
-
-    QNetworkAccessManager *manager = new QNetworkAccessManager(this);
-    connect(manager, &QNetworkAccessManager::finished, this , [&](QNetworkReply *reply){
-        QByteArray data = reply ->readAll();
-         QString str = QString::fromLatin1(data);
-         qDebug() << str;
-    });
-    manager->get(QNetworkRequest(QUrl("https://codingprof.hs-rw.de/files/exercise-files/filelist.txt")));
-}
 

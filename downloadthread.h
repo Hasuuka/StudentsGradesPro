@@ -28,7 +28,6 @@ public slots:
 private:
 
 
-
 };
 
 #endif // DOWNLOADTHREAD_H
