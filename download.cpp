@@ -20,49 +20,42 @@ void Download::startCalculation()
     connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
     loop.exec();
 
-    emit progressUpdated(1,1);
     qDebug()<<"Finished getting url.";
-    QThread::sleep(1);
+
 
     QByteArray data = reply ->readAll();
     QString str = QString::fromLatin1(data);
-
-    int size = str.count(".csv");
-    emit progressUpdated(1,size+1);
-
-    string buffer = str.toStdString();
-    string urlArray[size];
-    for(int i = 0;i<size;i++ ){
+    int length =str.count(".csv");
+    QString array[length];
+    for(int i = 0; i< length;i++){
         if(QThread::currentThread()->isInterruptionRequested()){
             qDebug()<<"Canceled.";
                 return;
         }
-        urlArray[i] = buffer.substr(0,buffer.find(".csv")+4);
-        buffer.erase(0,buffer.find(".csv")+4);
-
-        qDebug()<< "Processed" << i+1 << "of"<< size;
-        emit progressUpdated(1,size+2);
+        array[i] =  str.sliced(0, str.indexOf(".csv")+4);
+        str.remove(0,str.indexOf(".csv")+5);
+        qDebug()<< "Processed" << i+1 << "of"<< length;
+        emit progressUpdated(1,length);
         QThread::sleep(1);
     }
+     qDebug() << "Finished processing Url list.";
 
-    qDebug() << "Finished processing Url list.";
-
-    for(unsigned int i = 0; i< sizeof(urlArray)/sizeof(urlArray[0]);i++){
+    for(int i = 0; i < length;i++){
         if(QThread::currentThread()->isInterruptionRequested()){
             qDebug()<<"Canceled.";
                 return;
         }
-        reply = manager->get(QNetworkRequest(QUrl(QString::fromStdString(urlArray[i]))));
-        data = reply ->readAll();
-        str = QString::fromLatin1(data);
-        qDebug() << str;
+        reply = manager->get(QNetworkRequest(array[i]));
 
         QEventLoop loop;
         connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
         loop.exec();
 
-        emit progressUpdated(1,size+size+2);
-        qDebug()<< "Downloaded"<< i+1 << "of "<< sizeof(urlArray)/sizeof(urlArray[0]);
+        QByteArray data = reply ->readAll();
+        QString str = QString::fromLatin1(data);
+        qDebug()<< str;
+        emit progressUpdated(1,length*2);
+        qDebug()<< "Downloaded"<< i+1 << "of "<< length;
         QThread::sleep(1);
     }
     emit downloadFinished();
