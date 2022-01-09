@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include "csvlistmodel.h"
 #include "download.h"
+#include <QThread>
 
 
 QT_BEGIN_NAMESPACE

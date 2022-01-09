@@ -53,6 +53,9 @@ void Download::startCalculation()
                 return;
         }
         reply = manager->get(QNetworkRequest(QUrl(QString::fromStdString(urlArray[i]))));
+        data = reply ->readAll();
+        str = QString::fromLatin1(data);
+        qDebug() << str;
 
         QEventLoop loop;
         connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));

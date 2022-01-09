@@ -2,7 +2,6 @@
 #include "ui_mainwindow.h"
 #include "shareddata.h"
 #include "QDebug"
-#include "downloadthread.h"
 #include "urldialog.h"
 #include "string"
 using namespace std;
