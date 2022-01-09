@@ -4,6 +4,8 @@
 #include "QDebug"
 #include "downloadthread.h"
 #include "urldialog.h"
+#include "string"
+using namespace std;
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -15,6 +17,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     ui->calculateButton->setDisabled(true);
     ui->cancelButton->setDisabled(true);
+    ui->progressBar->setValue(0);
 
     connect(this, &MainWindow::informUrl, this, &MainWindow::changeUrl);
     connect(this, &MainWindow::informButton, this, &MainWindow::changeButton);
@@ -31,7 +34,8 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
-
+    delete m_thread;
+    delete m_download;
     delete ui;
 }
 
@@ -40,7 +44,6 @@ void MainWindow::on_downloadButton_clicked()
 {
     urlDialog dlg;
     if(dlg.exec()==QDialog::Accepted){
-
         emit informUrl(dlg.url());
     }
 }
@@ -48,6 +51,7 @@ void MainWindow::on_downloadButton_clicked()
 
 void MainWindow::on_calculateButton_clicked()
 {
+    ui->calculateButton->setDisabled(true);
     emit informButton();
     m_thread->start();
     QMetaObject::invokeMethod(m_download,"startCalculation");
@@ -69,12 +73,20 @@ void MainWindow::changeButton()
 
 void MainWindow::downloadFinished()
 {
+    ui->cancelButton->setDisabled(true);
+    ui->calculateButton->setDisabled(false);
 
+    m_thread->quit();
+    m_thread->wait();
 }
 
-void MainWindow::progressUpdated()
+void MainWindow::progressUpdated(int value, int maximum)
 {
-
+    ui->progressBar->setMaximum(maximum);
+    value+= ui->progressBar->value();
+    ui->progressBar->setValue(value);
+    int progress =static_cast<float>(static_cast<float>(value/static_cast<float>(maximum)))*static_cast<float>(100);
+    ui->label->setText("Progess " + QString::fromStdString(to_string(progress)) + "%"+ " of 100%");
 }
 
 void MainWindow::updateCsvList()
@@ -90,11 +102,13 @@ void MainWindow::on_cancelButton_clicked()
         m_thread->requestInterruption();
         m_thread->quit();
         m_thread->wait();
-        delete m_thread;
-        delete m_download;
-        qDebug()<< "quitted";
-    }
+        qDebug()<< "Thread quitted";
+        ui->cancelButton->setDisabled(true);
+        ui->calculateButton->setDisabled(false);
+        ui->progressBar->setValue(0);
+        ui->label->setText("Progess 0% of 100%");
 
+    }
 }
 
 

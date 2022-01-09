@@ -14,7 +14,7 @@ public:
     Q_INVOKABLE void startCalculation();
 signals:
     void downloadFinished();
-    void progressUpdated();
+    void progressUpdated(int, int);
 };
 
 #endif // DOWNLOAD_H

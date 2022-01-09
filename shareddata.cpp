@@ -2,7 +2,6 @@
 
 SharedData::SharedData()
 {
-    m_csvs.append(Csv("test", "2.0", "idk", "1.0"));
 
 }
 

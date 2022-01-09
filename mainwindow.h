@@ -32,7 +32,7 @@ public slots:
     void changeButton();
 
     void downloadFinished();
-    void progressUpdated();
+    void progressUpdated(int value, int maximum);
 
     void updateCsvList();
 
