@@ -15,6 +15,7 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     shareddata.cpp \
+    students.cpp \
     urldialog.cpp
 
 HEADERS += \
@@ -23,6 +24,7 @@ HEADERS += \
     download.h \
     mainwindow.h \
     shareddata.h \
+    students.h \
     urldialog.h
 
 FORMS += \
