@@ -16,9 +16,7 @@ public:
     ~urlDialog();
     QString url()const;
 
-
 signals:
-
     void urlChanged(QString url);
 
 private:

@@ -13,6 +13,10 @@ public:
     void printInfo(){
         cout << m_name << m_math << m_english << m_progra1 << m_progra2 << m_statistics << endl;
     }
+
+    float average() const;
+    const string &name() const;
+
 private:
     string m_name;
     float m_math;
@@ -20,7 +24,7 @@ private:
     float m_progra1;
     float m_progra2;
     float m_statistics;
-
+    float m_average;
 };
 
 #endif // STUDENTS_H

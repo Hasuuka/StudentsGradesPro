@@ -1,3 +1,4 @@
+
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "shareddata.h"
@@ -26,8 +27,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(m_download, &Download::downloadFinished, this, &MainWindow::downloadFinished);
     connect(m_download, &Download::progressUpdated, this, &MainWindow::progressUpdated);
+    connect(m_download, &Download::progressUpdated, this, &MainWindow::updateCsvList);
     m_download->moveToThread(m_thread);
-
 }
 
 
@@ -53,7 +54,7 @@ void MainWindow::on_calculateButton_clicked()
     ui->calculateButton->setDisabled(true);
     emit informButton();
     m_thread->start();
-    QMetaObject::invokeMethod(m_download,"startCalculation");
+    QMetaObject::invokeMethod(m_download,"startCalculation",Q_ARG(QString,m_url));
 }
 
 void MainWindow::changeUrl(QString url)
@@ -74,7 +75,6 @@ void MainWindow::downloadFinished()
 {
     ui->cancelButton->setDisabled(true);
     ui->calculateButton->setDisabled(false);
-
     m_thread->quit();
     m_thread->wait();
 }

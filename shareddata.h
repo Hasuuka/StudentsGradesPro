@@ -16,8 +16,6 @@ public:
     static SharedData* instance();
     void addCsv(QString filename, QString filesize, QString students, QString bestGrades);
 
-
-
 private:
     QList<Csv> m_csvs;
 };

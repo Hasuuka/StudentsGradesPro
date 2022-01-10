@@ -18,26 +18,19 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+
 signals:
     void informUrl(QString);
     void informButton();
 
 public slots:
-
     void on_downloadButton_clicked();
-
     void on_calculateButton_clicked();
-
     void changeUrl(QString);
-
     void changeButton();
-
     void downloadFinished();
     void progressUpdated(int value, int maximum);
-
     void updateCsvList();
-
-
 
 private slots:
     void on_cancelButton_clicked();
@@ -48,6 +41,5 @@ private:
     QString m_url;
     QThread* m_thread;
     Download* m_download;
-
 };
 #endif // MAINWINDOW_H

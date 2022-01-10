@@ -11,7 +11,8 @@ class Download : public QObject
     Q_OBJECT
 public:
     explicit Download(QObject *parent = nullptr);
-    Q_INVOKABLE void startCalculation();
+    Q_INVOKABLE void startCalculation(QString url);
+
 signals:
     void downloadFinished();
     void progressUpdated(int, int);
